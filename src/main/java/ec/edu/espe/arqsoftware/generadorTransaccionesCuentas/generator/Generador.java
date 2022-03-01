@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -50,30 +50,23 @@ public class Generador extends Thread {
 
         for (int i = 0; i < numeroTransacciones; i++) {
             int nDescripcion = random.nextInt(numDescripciones) + 0;
-            int nCuentas = random.nextInt(numeroCuentas) + 0;
+            int nCuenta = random.nextInt(numeroCuentas) + 0;
             String tipo = "";
             if (random.nextBoolean()) {
                 tipo = "DEP";
             } else {
                 tipo = "RET";
             }
-            if (random.nextBoolean()) {
-                tipo = "TRI";
-            } else {
-                tipo = "TRO";
-            }
-            if (random.nextBoolean()) {
-                tipo = "PAI";
-            }
+            
             float monto = 0;
-            if (clienteProductoPasivoList.get(nCuentas).getSaldoDisponible().intValue() != 0) {
-                monto = (clienteProductoPasivoList.get(nCuentas).getSaldoDisponible().intValue()) + 10;
+            if (clienteProductoPasivoList.get(nCuenta).getSaldoDisponible().intValue() != 0) {
+                monto = (random.nextInt(clienteProductoPasivoList.get(nCuenta).getSaldoDisponible().intValue()) + 10);
             }
 //            log.info("monto:{}", clienteProductoPasivoList.get(nCuentas).getSaldoDisponible().intValue());
 
             TransaccionRQ transaccionRQ = TransaccionRQ.builder()
-                    .cuentaId(clienteProductoPasivoList.get(nCuentas).getCuentaId())
-                    .cuentaSalida(clienteProductoPasivoList.get(nCuentas).getCodCliente())
+                    .cuentaId(clienteProductoPasivoList.get(nCuenta).getCuentaId())
+                    .cuentaSalida(clienteProductoPasivoList.get(nCuenta).getCodCliente())
                     .descripcion(descripciones.get(nDescripcion))
                     .monto(monto)
                     .tipo(tipo)
