@@ -30,12 +30,17 @@ public class Generador extends Thread {
     private int numeroTransacciones;
 
     public List<ClienteProductoPasivo> clienteProductoPasivoList;
+    
+    public int tiempo;
 //    public List<Transaccion> transaccionList;
 
     @Override
     public void run() {
 
         int numeroCuentas = clienteProductoPasivoList.size();
+        
+        float espera = (((float)tiempo/((float)numeroTransacciones-1))*1000);
+        log.info("Duracion hilo: {}",espera/1000);
 
         Random random = new Random();
 
@@ -58,17 +63,17 @@ public class Generador extends Thread {
                 tipo = "RET";
             }
             
-            float monto = 0;
-            if (clienteProductoPasivoList.get(nCuenta).getSaldoDisponible().intValue() != 0) {
-                monto = (random.nextInt(clienteProductoPasivoList.get(nCuenta).getSaldoDisponible().intValue()) + 10);
-            }
+//            float monto = 0;
+//            if (clienteProductoPasivoList.get(nCuenta).getSaldoDisponible().intValue() != 0) {
+//                monto = (random.nextInt(clienteProductoPasivoList.get(nCuenta).getSaldoDisponible().intValue()) + 10);
+//            }
 //            log.info("monto:{}", clienteProductoPasivoList.get(nCuentas).getSaldoDisponible().intValue());
 
             TransaccionRQ transaccionRQ = TransaccionRQ.builder()
                     .cuentaId(clienteProductoPasivoList.get(nCuenta).getCuentaId())
                     .cuentaSalida(clienteProductoPasivoList.get(nCuenta).getCodCliente())
-                    .descripcion(descripciones.get(nDescripcion))
-                    .monto(monto)
+                    .descripcion("DEP".equals(tipo)?descripciones.get(nDescripcion):"Retiro de dinero")
+                    .monto(random.nextInt(90)+10)
                     .tipo(tipo)
                     .build();
             log.info("Info:{}", transaccionRQ.toString());

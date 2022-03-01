@@ -26,9 +26,9 @@ public class GeneradorController {
      @Autowired
      private TransaccionService transaccionService;
      
-     @GetMapping(value = "/{numeroTransacciones}")
-     public ResponseEntity generar(@PathVariable int numeroTransacciones){
-         this.transaccionService.generador(numeroTransacciones);
+     @GetMapping(value = "/{numeroTransacciones}/{tiempo}")
+     public ResponseEntity generar(@PathVariable int numeroTransacciones, @PathVariable int tiempo){
+         this.transaccionService.generador(numeroTransacciones, tiempo);
          return ResponseEntity.ok().build();
      }
      

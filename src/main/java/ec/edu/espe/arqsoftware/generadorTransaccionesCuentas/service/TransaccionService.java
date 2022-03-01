@@ -10,6 +10,8 @@ import ec.edu.espe.arqsoftware.generadorTransaccionesCuentas.generator.Generador
 import ec.edu.espe.arqsoftware.generadorTransaccionesCuentas.model.ClienteProductoPasivo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -29,26 +31,22 @@ public class TransaccionService {
     @Autowired
     private KafkaTemplate<String,Object> kafkaTemplate;
     
-    public void generador(int numeroTransacciones){
+    public void generador(int numeroTransacciones, int tiempo){
         
         List<ClienteProductoPasivo> clienteProductoPasivo = this.clienteProdRepo.findAll();
         log.info("GENERANDO");
         
-        long inicio = System.nanoTime();
+        Generador generador1 = new Generador(kafkaTemplate, numeroTransacciones / 2, clienteProductoPasivo, tiempo);
+        Generador generador2 = new Generador(kafkaTemplate, (numeroTransacciones / 2)+(numeroTransacciones % 2), clienteProductoPasivo, tiempo);
         
-        List<Generador> hilos = new ArrayList<>();
-        for(int i=0;i<3;i++){
-            Generador generador = new Generador(kafkaTemplate,numeroTransacciones/2,clienteProductoPasivo);
-            hilos.add(generador);
-        }
-          
-        for(Generador h: hilos){
-            h.start();
+         generador1.start();
+        try {
+            generador1.sleep(5);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TransaccionService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-       long fin = System.nanoTime();
-        log.info("Tiempo de ejecucion: {}",(fin-inicio));
-        
+        generador2.start();
                 
     }
 }
