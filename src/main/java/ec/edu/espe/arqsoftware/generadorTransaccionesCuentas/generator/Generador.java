@@ -78,7 +78,7 @@ public class Generador extends Thread {
                     .build();
             log.info("Info:{}", transaccionRQ.toString());
 
-            kafkaTemplate.send("lbyl3ivs-tarjetas", transaccionRQ);
+            kafkaTemplate.send("lbyl3ivs-cuentas", transaccionRQ);
             log.info("Pasa Kafka: {}", transaccionRQ);
 //             log.info("NCuentas{}", nCuentas);
 //             log.info("NDescripcion{}",nDescripcion);
